@@ -105,8 +105,8 @@ async function submitEdit() {
 
     $("#form-spinner").html(spinner)
 
+    const id = $("#form-id").val()
     const vehicle = {
-        id: $("#form-id").val(),
         modelo: $("#form-modelo").val(),
         marca: $("#form-marca").val(),
         ano: $("#form-ano").val(),
@@ -115,7 +115,7 @@ async function submitEdit() {
     }
 
     await $.ajax({
-        url: endPoint,
+        url: endPoint + "?id=" + id,
         type: 'PUT',
         dataType: 'json',
         contentType: 'application/json',
@@ -171,16 +171,13 @@ async function submitDelete() {
 
     $("#details-spinner").html(spinner)
 
-    const data = {
-        id: $("#details-id").val()
-    }
+    const id = $("#details-id").val()
 
     await $.ajax({
-        url: endPoint,
+        url: endPoint + "?id=" + id,
         type: 'DELETE',
         dataType: 'json',
         contentType: 'application/json',
-        data: JSON.stringify(data),
         success: data => {
             alert("O veículo foi deleteado com sucesso")
             $("#details-spinner").html("")

@@ -40,7 +40,8 @@
 
         public function getAll($busca = "") {
             $select = "SELECT * FROM veiculos";
-                if($busca) $select .= " WHERE veiculo LIKE '%$busca%'";
+                if($busca) $select .= " WHERE (veiculo LIKE '%$busca%' OR 
+                    marca LIKE '%$busca%')";
             $select .= " ORDER BY id DESC";
 
             $result = $this->execSQL($select);

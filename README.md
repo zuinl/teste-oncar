@@ -10,7 +10,7 @@ O backend foi feito em PHP como uma API que recebe métodos POST, GET, PUT e DEL
 
 * **POST**: salva um novo veículo
 * **GET**: se usado sem o parâmetro "id" retorna todos os veículos. Com o parâmetro "id" retorna o veiculo correspondente. Também aceita o parâmetro "search" que busca os veículos 
-correspondentes ao modelo pesquisado
+correspondentes ao modelo ou marca pesquisada
 * **PUT**: atualiza o veículo correspondente
 * **DELETE**: deleta o veículo correspondente
 

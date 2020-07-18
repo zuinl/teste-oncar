@@ -36,11 +36,11 @@ switch($_SERVER['REQUEST_METHOD']) {
         }
     break;
     case 'PUT':
-        $veiculo->setId($data->id);
+        $veiculo->setId($_GET['id']);
         $veiculo->update();
     break;
     case 'DELETE':
-        $veiculo->setId($data->id);
+        $veiculo->setId($_GET['id']);
         $veiculo->delete();
     break;
     default:
