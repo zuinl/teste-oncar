@@ -1,6 +1,8 @@
 const spinner = '<div class="spinner-border text-primary" role="status">' +
                 '<span class="sr-only">Loading...</span></div>'
 
+const endPoint = "./veiculos/"
+
 async function loadVehicles(search = "") {
     $("#vehicles-spinner").html(spinner)
 
@@ -9,26 +11,21 @@ async function loadVehicles(search = "") {
     $("#details-marca").html('---')
     $("#details-ano").html('---')
     $("#details-descricao").html('---')
-
-    let endPoint = "./api/"
-    if(search.trim()) endPoint += "?search=" + search
     
     await $.ajax({
-        url: endPoint,
+        url: search.trim() ? endPoint + "?search=" + search : endPoint,
         type: 'GET',
         dataType: 'json',
         contentType: 'application/json',
-        success: function (data) {
+        success: data => {
             let vehicleDiv = ""
+
             data.map(vehicle => {
                 vehicleDiv +=
                 '<div class="row">' +
                     '<div class="card car-card">' +
                         '<div class="card-header">' +
-                            '<h5>' +
-                            '<a href="#" onClick="seeDetails(1);">' +
-                                vehicle.modelo +'</a>' +
-                            '</h5>' +
+                            '<h5>' + vehicle.modelo + '</h5>' +
                         '</div>' +
                         '<div class="card-body">' +
                             '<div class="row">' +
@@ -45,31 +42,32 @@ async function loadVehicles(search = "") {
                     '</div>' +
                 '</div>';
             })
+
             if(data.length === 0) $("#vehicles-div").html("Não encontramos nada aqui")
             else $("#vehicles-div").html(vehicleDiv)
         },
-        error: function(err) {
+        error: err => {
             $("#vehicles-div").html("<p>Houve um erro ao buscar os veículos</p>")
         }
-    });
+    })
+
     $("#vehicles-spinner").html("")
 }
 
 async function seeDetails(id) {
     $("#details-spinner").html(spinner)
     $("#details-spinner").focus()
-    $("#details-submit").attr("disabled", "true")
     $("#details-modelo").html('---')
     $("#details-marca").html('---')
     $("#details-ano").html('---')
     $("#details-descricao").html('---')
 
     await $.ajax({
-        url: './api/?id=' + id,
+        url: endPoint + "?id=" + id,
         type: 'GET',
         dataType: 'json',
         contentType: 'application/json',
-        success: function(data) {
+        success: data => {
             $("#details-modelo").html(data.veiculo)
             $("#details-marca").html(data.marca)
             $("#details-ano").html(data.ano)
@@ -77,8 +75,9 @@ async function seeDetails(id) {
             $("#details-vendido").val(data.vendido)
             $("#details-id").val(id)
             $("#details-submit").removeAttr("disabled")
+            $("#details-delete").removeAttr("disabled")
         },
-        error: function(err) {
+        error: err => {
             alert('Um erro ocorreu ao buscar os detalhes do veículo')
         }
     })
@@ -93,7 +92,7 @@ function edit() {
     $("#form-ano").val($("#details-ano").html())
     $("#form-descricao").val($("#details-descricao").html())
 
-    const isSold = $("#details-vendido").val() == "1" ? 
+    $("#details-vendido").val() == "1" ? 
         $("#form-vendido").attr("checked", "true") : 
         $("#form-vendido").removeAttr("checked")
     
@@ -103,6 +102,7 @@ function edit() {
 
 async function submitEdit() {
     if(!validateVehicle()) return
+
     $("#form-spinner").html(spinner)
 
     const vehicle = {
@@ -111,21 +111,21 @@ async function submitEdit() {
         marca: $("#form-marca").val(),
         ano: $("#form-ano").val(),
         descricao: $("#form-descricao").val(),
-        vendido: $("#form-vendido").prop("checked") == true ? "1" : "0"
+        vendido: $("#form-vendido").prop("checked") ? "1" : "0"
     }
 
     await $.ajax({
-        url: './api/',
+        url: endPoint,
         type: 'PUT',
         dataType: 'json',
         contentType: 'application/json',
         data: JSON.stringify(vehicle),
-        success: function(data) {
+        success: data => {
             alert("O veículo foi atualizado com sucesso")
             $("#form-spinner").html("")
             loadVehicles()
         },
-        error: function(err) {
+        error: err => {
             $("#form-spinner").html("")
             alert('Um erro ocorreu ao atualizar os detalhes do veículo')
         }
@@ -138,6 +138,7 @@ function add() {
 
 async function submitAdd() {
     if(!validateVehicle()) return
+
     $("#form-spinner").html(spinner)
 
     const vehicle = {
@@ -145,23 +146,49 @@ async function submitAdd() {
         marca: $("#form-marca").val(),
         ano: $("#form-ano").val(),
         descricao: $("#form-descricao").val(),
-        vendido: $("#form-vendido").prop("checked") == true ? "1" : "0"
+        vendido: $("#form-vendido").prop("checked") ? "1" : "0"
     }
 
     await $.ajax({
-        url: './api/',
+        url: endPoint,
         type: 'POST',
         dataType: 'json',
         contentType: 'application/json',
         data: JSON.stringify(vehicle),
-        success: function(data) {
+        success: data => {
             alert("O veículo foi adicionado com sucesso")
             $("#form-spinner").html("")
             loadVehicles()
         },
-        error: function(err) {
+        error: err => {
             $("#form-spinner").html("")
             alert('Um erro ocorreu ao adicionar o veículo')
+        }
+    })
+}
+
+async function submitDelete() {
+
+    $("#details-spinner").html(spinner)
+
+    const data = {
+        id: $("#details-id").val()
+    }
+
+    await $.ajax({
+        url: endPoint,
+        type: 'DELETE',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: data => {
+            alert("O veículo foi deleteado com sucesso")
+            $("#details-spinner").html("")
+            loadVehicles()
+        },
+        error: err => {
+            $("#details-spinner").html("")
+            alert('Um erro ocorreu ao deletar o veículo')
         }
     })
 }

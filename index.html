@@ -81,7 +81,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-sm-6">
                                 <input type="hidden" id="details-vendido" value="">
                                 <input type="hidden" id="details-id" value="">
                                 <button type="button" 
@@ -91,6 +91,13 @@
                                     data-target="#formModal"
                                     disabled 
                                     onClick="edit();">Editar veículo</button>
+                            </div>
+                            <div class="col-sm-6">
+                                <button type="button" 
+                                    id="details-delete"
+                                    class="btn btn-danger" 
+                                    disabled 
+                                    onClick="submitDelete();">Excluir</button>
                             </div>
                         </div>
                     </div>

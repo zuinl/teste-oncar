@@ -1,12 +1,12 @@
 <?php
-
+ 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, X-Requested-With");
 
-require_once './config/Veiculo.php';
+include './config/Veiculo.php';
 
 $json = file_get_contents("php://input");
 $data = json_decode($json);
@@ -40,7 +40,7 @@ switch($_SERVER['REQUEST_METHOD']) {
         $veiculo->update();
     break;
     case 'DELETE':
-        $veiculo->setId($_GET['id']);
+        $veiculo->setId($data->id);
         $veiculo->delete();
     break;
     default:
