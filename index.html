@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTE - OnCar</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    
+    <script type="text/javascript" src="./index.js"></script>
+    <link rel="stylesheet" href="./index.css">
+
+    <script>
+        $(() => loadVehicles())
+    </script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <h1>Teste Técnico - OnCar</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="input-group">
+                    <input type="text" 
+                        class="form-control" 
+                        id="search-input"
+                        placeholder="Buscar veículo por modelo">
+                    <div class="input-group-append" id="button-addon4">
+                        <button class="btn btn-outline-primary" 
+                            type="button"
+                            onClick="loadVehicles($('#search-input').val())">Buscar</button>
+                        <button class="btn btn-outline-secondary" 
+                            type="button" 
+                            data-toggle="modal" 
+                            data-target="#formModal" 
+                            onClick="add();">Adicionar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-8">
+                <h3>Lista de veículos</h3>
+                <div id="vehicles-spinner"></div>
+                <div id="vehicles-div"></div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="card details-card">
+                    <div class="card-header">
+                        <h6>Detalhes do veículo</h6>
+                    </div>
+                    <div class="card-body">
+                        <div id="details-spinner"></div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h4 id="details-modelo">Modelo do veículo</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h6>MARCA</h6>
+                                <h4 id="details-marca">---</h4>
+                            </div>
+                            <div class="col-sm-6">
+                                <h6>ANO</h6>
+                                <h4 id="details-ano">---</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <p id="details-descricao">Descrição do veículo...</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <input type="hidden" id="details-vendido" value="">
+                                <input type="hidden" id="details-id" value="">
+                                <button type="button" 
+                                    id="details-submit"
+                                    class="btn btn-info" 
+                                    data-toggle="modal" 
+                                    data-target="#formModal"
+                                    disabled 
+                                    onClick="edit();">Editar veículo</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<!-- Modal -->
+<div id="formModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Informações do veículo</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form>
+            <div id="form-spinner"></div>
+            <div class="form-group">
+                <label for="form-modelo">Modelo</label>
+                <input type="text" class="form-control" id="form-modelo" maxlength="50" required>
+            </div>
+            <div class="form-group">
+                <label for="form-marca">Marca</label>
+                <input type="text" class="form-control" id="form-marca" maxlength="30" required>
+            </div>
+            <div class="form-group">
+                <label for="form-ano">Ano</label>
+                <input type="number" class="form-control" id="form-ano" min="1900" max="2999" required>
+            </div>
+            <div class="form-group">
+                <label for="form-descricao">Descrição</label>
+                <textarea class="form-control" id="form-descricao" required></textarea>
+            </div>
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="form-vendido" value="1">
+                <label class="form-check-label" for="form-vendido">Vendido</label>
+            </div>
+            <input type="hidden" id="form-id" value="">
+            <button type="button" id="form-submit" class="btn btn-primary">Salvar</button>
+        </form>
+      </div>
+  </div>
+</div>
+
+</html>
