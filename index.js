@@ -7,6 +7,7 @@ async function loadVehicles(search = "") {
     $("#vehicles-spinner").html(spinner)
 
     $("#details-submit").attr("disabled", "true")
+    $("#details-delete").attr("disabled", "true")
     $("#details-modelo").html('---')
     $("#details-marca").html('---')
     $("#details-ano").html('---')
